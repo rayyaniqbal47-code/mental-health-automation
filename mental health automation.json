@@ -1,0 +1,177 @@
+{
+  "name": "mental health automation",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "189c524f-4757-44e8-b805-dfebe81939bf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -288,
+        0
+      ],
+      "id": "21c0880e-3dac-48a0-b5fa-2709c9d78abc",
+      "name": "Webhook",
+      "webhookId": "189c524f-4757-44e8-b805-dfebe81939bf"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are an expert mental health report generator and email designer.\n\nYou will receive user survey data. Your task is to generate a PROFESSIONAL, WELL-DESIGNED HTML EMAIL REPORT.\n\n⚠️ STRICT RULES:\n- Output ONLY valid HTML\n- Do NOT include markdown\n- Do NOT include explanations\n- Do NOT include code block formatting\n- Do NOT include backticks\n- The response must be directly usable in Gmail / email clients\n- Use inline CSS only (no external CSS)\n- Design must use a calming GREEN LIGHT THEME\n- Must look modern, clean, and mobile-friendly\n\n🎨 DESIGN REQUIREMENTS:\n- Background: soft light green (#f3fbf5 or similar)\n- Primary color: green (#2e7d32 or #4caf50)\n- Card-style layout with subtle shadows\n- Rounded corners\n- Clear sections\n- Professional typography (Arial, Helvetica, sans-serif)\n\n📊 CONTENT STRUCTURE:\n\n1. Header Section\n- Title: \"Mental Health Wellness Report\"\n- User name included dynamically\n\n2. Summary Section\n- Short emotional summary based on answers\n\n3. Breakdown Section (cards or boxes):\n- Mood\n- Sleep\n- Energy\n- Social Connection\n- Focus\n- Coping Style\n- Help Readiness\n\n4. Insights Section:\n- 2–4 bullet points analyzing mental state\n\n5. Recommendations Section:\n- Gentle, supportive suggestions (3–6 points)\n\n6. Footer:\n- Encouraging message\n- Optional disclaimer: \"This is not a medical diagnosis\"\n\n📩 USER DATA:\nName: {{$json.body.name}}\nEmail: {{$json.body.email}}\n\nMood: {{$json.body.answers.mood}}\nSleep: {{$json.body.answers.sleep}}\nEnergy: {{$json.body.answers.energy}}\nSocial: {{$json.body.answers.social}}\nFocus: {{$json.body.answers.focus}}\nCoping: {{$json.body.answers.coping}}\nHelp: {{$json.body.answers.help}}\n\n🚨 FINAL OUTPUT RULE:\nReturn ONLY HTML email body ready to send via Gmail."
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -80,
+        0
+      ],
+      "id": "1c3a280d-3210-4643-bf96-fa2c625430a2",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "J5skLpd3Z0bezC4z",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Webhook').item.json.body.email }}",
+        "subject": "mental email",
+        "message": "={{ $json.content.parts[0].text }}",
+        "options": {
+          "appendAttribution": false,
+          "senderName": "Mental pro"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        272,
+        0
+      ],
+      "id": "a307839d-0cf5-4405-b13c-8bbeb91e5712",
+      "name": "Send a message",
+      "webhookId": "c4baf14d-f3d7-42ce-89ba-c7a4528a70f7",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Becnr4vxbhpfP1Pe",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "rayyan-n8n.app.n8n.cloud",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+            "content-length": "387",
+            "accept": "*/*",
+            "accept-encoding": "gzip, br",
+            "accept-language": "en-US,en;q=0.9",
+            "cdn-loop": "cloudflare; loops=1; subreqs=1",
+            "cf-connecting-ip": "202.47.47.203",
+            "cf-ew-via": "15",
+            "cf-ipcountry": "PK",
+            "cf-ray": "9ea87ae61b39f9fa-MCT",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-worker": "n8n.cloud",
+            "content-type": "application/json",
+            "origin": "https://id-preview--b174797e-0aef-4a58-8d9d-f1bc7693d152.lovable.app",
+            "priority": "u=1, i",
+            "referer": "https://id-preview--b174797e-0aef-4a58-8d9d-f1bc7693d152.lovable.app/",
+            "sec-ch-ua": "\"Chromium\";v=\"146\", \"Not-A.Brand\";v=\"24\", \"Google Chrome\";v=\"146\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"Windows\"",
+            "sec-fetch-dest": "empty",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-site": "cross-site",
+            "x-forwarded-for": "202.47.47.203, 162.158.28.136",
+            "x-forwarded-host": "rayyan-n8n.app.n8n.cloud",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "traefik-prod-users-gwc-55-8669d4b474-ljfwv",
+            "x-is-trusted": "yes",
+            "x-real-ip": "202.47.47.203"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "name": "john",
+            "email": "macejohn179@gmail.com",
+            "answers": {
+              "mood": "Mostly happy & content",
+              "sleep": "Generally good with occasional issues",
+              "energy": "Moderate — enough to get through the day",
+              "social": "Somewhat connected",
+              "focus": "Mostly clear with occasional fog",
+              "coping": "Talking to friends or family",
+              "help": "Open to it but haven't started"
+            },
+            "submittedAt": "2026-04-11T08:04:19.510Z"
+          },
+          "webhookUrl": "https://rayyan-n8n.app.n8n.cloud/webhook/189c524f-4757-44e8-b805-dfebe81939bf",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "23392f74-27a8-45b1-811a-bd0e3a3e7524",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a86d3c2f3afc73e126abf13328bf1ced5011b61ae3b9776a151312f721ac818e"
+  },
+  "id": "GzZB8HTJpyjhpRq6",
+  "tags": []
+}
